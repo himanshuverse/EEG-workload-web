@@ -1,74 +1,127 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+/* "Pine & amber": ink on paper, with a highlighter on the part that matters. */
+@theme {
+  --font-display: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-paper: #f6f3ec;
+  --color-ink: #1a2321;
+  --color-highlight: #f5b82e;
+  --color-surface: #ffffff;
+  --color-accent-ink: #0b5a4d;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-brand-50: #f2f8f7;
+  --color-brand-100: #e0f0ed;
+  --color-brand-200: #c1e2dc;
+  --color-brand-300: #8eccc2;
+  --color-brand-400: #40bfaa;
+  --color-brand-500: #21a18c;
+  --color-brand-600: #158472;
+  --color-brand-700: #0f6b5c;
+  --color-brand-800: #0b5a4d;
+  --color-brand-900: #0d4038;
+  --color-brand-950: #0f2b27;
 }
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  @apply bg-surface text-ink antialiased;
   overflow-x: hidden;
 }
 
-@keyframes waveFlow {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+.bg-graph-paper {
+  background-color: var(--color-paper);
+  background-image: radial-gradient(circle, rgb(26 35 33 / 0.16) 1px, transparent 1.3px);
+  background-size: 22px 22px;
 }
 
-@keyframes waveFlowReverse {
-  0% {
-    transform: translateX(-50%);
-  }
-  100% {
-    transform: translateX(0);
-  }
+@keyframes heroIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+.hero-in { animation: heroIn 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(6px); }
+}
+.cta-bob { animation: bob 1.6s ease-in-out infinite; }
+
+@keyframes grow {
+  from { transform: scaleY(0); }
+  to { transform: scaleY(1); }
+}
+.bar-grow { transform-origin: bottom; animation: grow 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-in, .cta-bob, .bar-grow { animation: none; }
 }
 
-@keyframes floatGentle {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-5px);
-  }
+/* ── dark mode ("Graphite"): the shared tokens are redefined, so bg-paper / text-ink / stone-* follow automatically ── */
+.dark,
+.theme-black {
+  color-scheme: dark;
+  --color-paper: #121212;
+  --color-ink: #e5e5e5;
+  --color-surface: #1c1c1c;
+  --color-accent-ink: #7fd8c8;
+  --color-stone-50: #181818;
+  --color-stone-100: #222222;
+  --color-stone-200: #2c2c2c;
+  --color-stone-300: #3a3a3a;
+  --color-stone-400: #555555;
+  --color-stone-500: #8a8a8a;
+  --color-stone-600: #a3a3a3;
+  --color-stone-700: #c2c2c2;
+  --color-stone-800: #dadada;
+  --color-stone-900: #ececec;
+  --color-brand-50: #14211e;
+  --color-brand-100: #183630;
+  --color-brand-200: #1f4740;
 }
+/* parts that are always dark keep the light tints for their text */
+.dark .keep-light {
+  --color-paper: #f6f3ec;
+  --color-brand-50: #f2f8f7;
+  --color-brand-100: #e0f0ed;
+  --color-brand-200: #c1e2dc;
+}
+.theme-black {
+  --color-paper: #101010;
+  --color-surface: #000000;
+}
+.dark .bg-graph-paper,
+.theme-black .bg-graph-paper { background-image: radial-gradient(circle, rgb(255 255 255 / 0.08) 1px, transparent 1.3px); }
 
-.animate-wave-flow {
-  display: flex;
-  width: 200%;
-  animation: waveFlow 22s linear infinite;
+/* the theme lamp: the cord stretches when pulled and the lamp swings from the ceiling */
+@keyframes lamp-pull {
+  0% { transform: translateY(0); }
+  30% { transform: translateY(9px); }
+  60% { transform: translateY(-2px); }
+  100% { transform: translateY(0); }
 }
+@keyframes lamp-swing {
+  0% { transform: rotate(0); }
+  20% { transform: rotate(7deg); }
+  45% { transform: rotate(-5deg); }
+  70% { transform: rotate(2.5deg); }
+  100% { transform: rotate(0); }
+}
+.lamp-pull { animation: lamp-pull 550ms cubic-bezier(0.22, 1, 0.36, 1); }
+.lamp-swing { transform-origin: 50% 0; animation: lamp-swing 1100ms ease-out; }
+@media (prefers-reduced-motion: reduce) { .lamp-pull, .lamp-swing { animation: none; } }
 
-.animate-wave-flow-reverse {
-  display: flex;
-  width: 200%;
-  animation: waveFlowReverse 16s linear infinite;
-}
-
-.animate-float-gentle {
-  animation: floatGentle 4s ease-in-out infinite;
-}
+/* features section previews */
+@keyframes feat-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes feat-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes feat-ping { 0% { transform: scale(0.6); opacity: 0.5; } 100% { transform: scale(1.8); opacity: 0; } }
+.feat-draw { animation: feat-draw 1.6s cubic-bezier(0.4, 0, 0.2, 1) 0.2s both; }
+.feat-fade { animation: feat-fade 0.8s ease 1.2s both; }
+.feat-ping { transform-box: fill-box; transform-origin: center; animation: feat-ping 1.8s ease-out 1.4s infinite; }
+@media (prefers-reduced-motion: reduce) { .feat-draw, .feat-fade, .feat-ping { animation: none; } }
